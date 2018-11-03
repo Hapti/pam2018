@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String trimResult(String s){
-        if((s.endsWith("0") || s.endsWith(".")) && s.length() > 1){
+        if(((s.endsWith("0") && s.contains(".") ) || s.endsWith(".")) && s.length() > 1){
             s = s.substring(0, s.length() - 1);
             s = trimResult(s);
         }
