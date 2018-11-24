@@ -152,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String currentText = result.getText().toString();
+                if(currentText.endsWith("/"))
+                    currentText = currentText.substring(0, currentText.length()-1);
                 if(currentText.length() <= 15)
                     result.setText(currentText.concat("*"));
             }
@@ -161,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String currentText = result.getText().toString();
+                if(currentText.endsWith("*"))
+                    currentText = currentText.substring(0, currentText.length()-1);
                 if(currentText.length() <= 15)
                     result.setText(currentText.concat("/"));
             }
@@ -210,8 +214,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String currentText = result.getText().toString();
-                if(currentText.length() <= 15)
-                    result.setText(currentText.concat("."));
+                String toConcat;
+
+                if(currentText.length() <= 15){
+                    if(currentText.isEmpty() || !Character.isDigit(currentText.charAt(currentText.length()-1))) {
+                        toConcat = "0.";
+                    } else {
+                        toConcat = ".";
+                    }
+                    result.setText(currentText.concat(toConcat));
+                }
             }
         });
 
@@ -220,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String currentText = result.getText().toString();
                 currentText = trimInput(currentText);
-                if(!currentText.isEmpty()) {
+                if(currentText != null && !currentText.isEmpty()) {
                     Context rhino = Context.enter();
                     rhino.setOptimizationLevel(-1);
                     try {
@@ -250,9 +262,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String trimInput(String s){
-        if((s.endsWith("+") || s.endsWith("-") || s.endsWith("*") || s.endsWith("/") || s.endsWith(".")) && s.length() > 1){
+        if(s.length() >=1 && !Character.isDigit(s.charAt(s.length() - 1))){
             s = s.substring(0, s.length() - 1);
             s = trimInput(s);
+        }
+        if(s.length() > 0 && !Character.isDigit(s.charAt(0))){
+            s = "0" + s;
         }
         return  s;
     }
