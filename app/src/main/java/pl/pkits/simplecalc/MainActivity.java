@@ -505,9 +505,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String trimInput(String s){
-        if((s.endsWith("+") || s.endsWith("-") || s.endsWith("*") || s.endsWith("/") || s.endsWith(".")) && s.length() > 1){
+        if(s.length() >=1 && !Character.isDigit(s.charAt(s.length() - 1))){
             s = s.substring(0, s.length() - 1);
             s = trimInput(s);
+        }
+        if(s.length() > 0 && !Character.isDigit(s.charAt(0))){
+            s = "0" + s;
         }
         return  s;
     }
